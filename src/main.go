@@ -3,6 +3,8 @@ package main
 import (
 	"errors"
 	"fmt"
+	"os"
+	"strconv"
 )
 
 // Add returns the sum of two numbers
@@ -29,20 +31,48 @@ func Divide(a, b float64) (float64, error) {
 }
 
 func main() {
-	fmt.Println("Calculator Demo")
-	fmt.Printf("10 + 5 = %.2f\n", Add(10, 5))
-	fmt.Printf("10 - 5 = %.2f\n", Subtract(10, 5))
-	fmt.Printf("10 * 5 = %.2f\n", Multiply(10, 5))
-
-	result, err := Divide(10, 5)
-	if err != nil {
-		fmt.Printf("Error: %v\n", err)
-	} else {
-		fmt.Printf("10 / 5 = %.2f\n", result)
+	fmt.Println("Versione 1.0.1")
+	if len(os.Args) != 4 {
+		fmt.Println("Usage: calculator <oeration> <num1> <num2>")
+		fmt.Println("Operations: add, sub, mul, div")
+		fmt.Println("Example: calculator add 10 5")
+		os.Exit(1)
 	}
 
-	_, err = Divide(10, 0)
+	operation := os.Args[1]
+	a, err := strconv.ParseFloat(os.Args[2], 64)
 	if err != nil {
-		fmt.Printf("10 / 0 = Error: %v\n", err)
+		fmt.Printf("Error: invalid number '%s'\n", os.Args[2])
+		os.Exit(1)
+	}
+
+	b, err := strconv.ParseFloat(os.Args[3], 64)
+	if err != nil {
+		fmt.Printf("Error: invalid number '%s'\n", os.Args[3])
+		os.Exit(1)
+	}
+
+	var result float64
+	switch operation {
+	case "add":
+		result = Add(a, b)
+		fmt.Printf("%.2f + %.2f = %.2f\n", a, b, result)
+	case "sub":
+		result = Subtract(a, b)
+		fmt.Printf("%.2f - %.2f = %.2f\n", a, b, result)
+	case "mul":
+		result = Multiply(a, b)
+		fmt.Printf("%.2f * %.2f = %.2f\n", a, b, result)
+	case "div":
+		result, err := Divide(a, b)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Printf("%.2f / %.2f = %.2f\n", a, b, result)
+	default:
+		fmt.Printf("Error: unknown operation '%s'\n", operation)
+		fmt.Println("Valid operations: add, sub, mul, div")
+		os.Exit(1)
 	}
 }

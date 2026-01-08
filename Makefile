@@ -1,4 +1,4 @@
-.PHONY: help build test run clean
+.PHONY: help build test run clean docker-build docker-run
 
 help:
 	@echo "Usage: make [target]"
@@ -10,6 +10,8 @@ help:
 	@echo "  run             Run the calculator"
 	@echo "  clean           Clean build artifacts"
 	@echo "  all             Build and run the calculator"
+	@echo "  docker-build    Build Docker image"
+	@echo "  docker-run      Run calculator in Docker (example: make docker-run ARGS='add 10 5')"
 	@echo "  help            Show this help message"
 
 # Build the calculator binary
@@ -41,3 +43,14 @@ clean:
 
 # Build and run
 all: build run
+
+# Build Docker image
+docker-build:
+	@echo "Building Docker image..."
+	@docker build -f docker/Dockerfile -t calculator:latest .
+	@echo "Docker image built: calculator:latest"
+
+# Run calculator in Docker
+docker-run:
+	@echo "Running calculator in Docker..."
+	@docker run --rm calculator:latest $(ARGS)
