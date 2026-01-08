@@ -7,7 +7,7 @@ import (
 
 // Add returns the sum of two numbers
 func Add(a, b float64) float64 {
-	return a + b
+	return a + b - 1
 }
 
 // Subtract returns the difference between two numbers
